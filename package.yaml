@@ -1,0 +1,60 @@
+name:                "tt"
+version:             "0.1.0.0"
+github:              "lgastako/tt"
+license:             "BSD3"
+author:              "John Evans"
+maintainer:          "lgastako@gmail.com"
+copyright:           "2023 John Evans"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+synopsis:            "Typed templates"
+category:            "Text"
+
+description:         "README at <https://github.com/lgastako/tt#readme>"
+
+# TODO remove unnecessary deps once we know which ones are unnecessary
+dependencies:
+- base >= 4.7 && < 5
+- bytestring
+- containers
+- generic-lens
+- lens
+- protolude
+- row-types
+- text
+- uuid
+- vector
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+tests:
+  tt-test:
+    main:                Driver.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - tt
+    - QuickCheck
+    - hspec
+    - tasty
+    - tasty-discover
+    - tasty-hspec
+    - tasty-quickcheck
