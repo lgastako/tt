@@ -3,7 +3,14 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: row-types-1.0.1.2@sha256:5c56e91d30b61f275eaee0d97b015d5332d95d7599e57582d6e62a43aa388087,2948
+    pantry-tree:
+      sha256: 5fb893f6e14aff59d6f2be39b4b288c66d53551f746c44edd0d069487ce167bd
+      size: 1060
+  original:
+    hackage: row-types-1.0.1.2
 snapshots:
 - completed:
     sha256: 9fa4bece7acfac1fc7930c5d6e24606004b09e80aa0e52e9f68b148201008db9
