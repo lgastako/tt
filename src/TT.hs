@@ -1,18 +1,33 @@
-module TT where
+{-# LANGUAGE DataKinds          #-}
+{-# LANGUAGE ExplicitNamespaces #-}
+{-# LANGUAGE TypeOperators      #-}
 
-import Data.Text
+module TT
+  ( Template
+  , render
+  , partial
+  , example
+  ) where
+
+import Data.Row  ( (.==)
+                 , (.+)
+                 , type (.==)
+                 , type (.+)
+                 , Rec
+                 )
+import Data.Text ( Text )
 
 -- | A template is a function from a row type to text.
-type Template a = a -> Text
+type Template a = Rec a -> Text
 
 -- | Render the template by passing a complete row-type.
-render :: Template a -> a -> Text
+render :: Template a -> Rec a -> Text
 render = undefined
 
 -- | Partially apply a template by passing a partial row-type.
-partial :: Template a -> a -> Template a
+partial :: Template a -> Rec a -> Template a
 partial = undefined
 
 -- | Example template
-myTemplate :: Template ("name" .== Text .+ "age" .== Int)
-myTemplate = undefined
+example :: Template ("name" .== Text .+ "age" .== Int)
+example = undefined
