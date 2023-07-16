@@ -1,13 +1,22 @@
-{-# LANGUAGE DataKinds          #-}
-{-# LANGUAGE ExplicitNamespaces #-}
-{-# LANGUAGE TypeOperators      #-}
+{-# LANGUAGE DataKinds           #-}
+{-# LANGUAGE ExplicitNamespaces  #-}
+{-# LANGUAGE FlexibleContexts    #-}
+{-# LANGUAGE OverloadedLabels    #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeOperators       #-}
 
 module TT
   ( Template
   , render
   , partial
   , example
+  , renderedExample
+  , partialExample
+  , finishedExample
   ) where
+
+import qualified Data.Text as T
 
 import Data.Row  ( (.==)
                  , (.+)
@@ -15,20 +24,42 @@ import Data.Row  ( (.==)
                  , type (.==)
                  , type (.+)
                  , Rec
+                 , Forall
                  )
-import Data.Text ( Text, pack )
+import Data.Row.Internal ( Unconstrained1 )
 
 -- | A template is a function from a row type to text.
-type Template a = Rec a -> Text
+type Template a = Rec a -> T.Text
 
 -- | Render the template by passing a complete row-type.
-render :: Template a -> Rec a -> Text
-render template record = template record
+render :: forall a.
+          Template a
+       -> Rec a
+       -> T.Text
+render = ($)
 
 -- | Partially apply a template by passing a partial row-type.
-partial :: Template a -> Rec a -> Template a
-partial template partialRecord = \record -> template (partialRecord .+ record)
+partial :: forall a b.
+           Forall a Unconstrained1
+        => Template (a .+ b)
+        -> Rec a
+        -> Template b
+partial t a = \b -> t (a .+ b)
 
--- | Example template
-example :: Template ("name" .== Text .+ "age" .== Int)
-example record = pack ("My name is " ++ (record .! #name) ++ " and I am " ++ show (record .! #age) ++ " years old.")
+example :: Template ("name" .== T.Text .+ "age" .== Int)
+example r = T.unwords
+  [ "My name is"
+  , r .! #name
+  , "and I am"
+  , (T.pack . show) (r .! #age)
+  , "years old."
+  ]
+
+renderedExample :: T.Text
+renderedExample = render example (#name .== "Rip Van Winkle" .+ #age .== 55)
+
+partialExample :: Template ("age" .== Int)
+partialExample = partial example (#name .== "Rip Van Winkle")
+
+finishedExample :: T.Text
+finishedExample = partialExample (#age .== 55)
