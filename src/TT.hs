@@ -67,6 +67,12 @@ partialExample = partial example (#name .== "Rip Van Winkle")
 finishedExample :: T.Text
 finishedExample = partialExample (#age .== 55)
 
+-- We'd like this function to handle a case where we have a nested row-type and
+-- we pass only part of the outer type containing only part of the inner type, like so:
+--   Template ("person" .== ("name" .== T.Text .+ "age" .== Int) .+ "location" .== T.Text)
+-- and we call it with:
+--   Rec ("person" .== ("name" .== "Rip Van Winkle"))
+
 partialGeneral :: forall a b.
                   Forall a Unconstrained1
                => Template (a .+ b)
