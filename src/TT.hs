@@ -47,7 +47,7 @@ render = ($)
 
 -- | Partially apply a template by passing a partial row-type.
 partial :: forall a b.
-           Forall a Unconstrained1
+           Forall (a .+ b) Unconstrained1
         => Template (a .+ b)
         -> Rec a
         -> Template b
@@ -78,7 +78,7 @@ finishedExample = partialExample (#age .== 55)
 --   Rec ("person" .== ("name" .== "Rip Van Winkle"))
 
 partialGeneral :: forall a b c.
-                  Forall a Unconstrained1
+                  Forall (a .+ b) Unconstrained1
                => Template ((a .+ b) .+ c)
                -> Rec (a .+ b)
                -> Template c

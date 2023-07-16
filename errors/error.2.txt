@@ -1,0 +1,28 @@
+src/TT.hs:85:35-36: error: …
+    • Could not deduce (Forall (a .+ b) Unconstrained1)
+        arising from a use of ‘.+’
+      from the context: Forall a Unconstrained1
+        bound by the type signature for:
+                   partialGeneral :: forall (a :: Row (*)) (b :: Row (*))
+                                            (c :: Row (*)).
+                                     Forall a Unconstrained1 =>
+                                     Template ((a .+ b) .+ c) -> Rec (a .+ b) -> Template c
+        at /Users/john/src/tt/src/TT.hs:(80,1)-(84,28)
+    • In the first argument of ‘t’, namely ‘(ab .+ c)’
+      In the expression: t (ab .+ c)
+      In the expression: \ c -> t (ab .+ c)
+   |
+src/TT.hs:98:62-64: error: …
+    • Illegal term-level use of the type constructor ‘Rec’
+        imported from ‘Data.Row’ at /Users/john/src/tt/src/TT.hs:32:20-22
+        (and originally defined in ‘Data.Row.Records’)
+    • In the second argument of ‘(.==)’, namely
+        ‘Rec (#name .== "Rip Van Winkle" .+ #age .== 55)’
+      In the first argument of ‘(.+)’, namely
+        ‘(#person .== Rec (#name .== "Rip Van Winkle" .+ #age .== 55))’
+      In the second argument of ‘render’, namely
+        ‘((#person .== Rec (#name .== "Rip Van Winkle" .+ #age .== 55))
+            .+ #location .== "Sleepy Hollow")’
+   |
+Compilation failed.
+λ> 
