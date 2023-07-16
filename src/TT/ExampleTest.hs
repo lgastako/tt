@@ -1,31 +1,30 @@
+{-# LANGUAGE DataKinds          #-}
 {-# LANGUAGE ExplicitNamespaces #-}
-{-# LANGUAGE DataKinds       #-}
-{-# LANGUAGE QuasiQuotes     #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings  #-}
+{-# LANGUAGE QuasiQuotes        #-}
+{-# LANGUAGE TemplateHaskell    #-}
 
-{-# OPTIONS_GHC -Wno-everything #-}
+module TT.ExampleTest
+  ( exampleTemplate
+  , exampleText
+  ) where
 
-module TT.ExampleTest where
-
+import Data.Text  ( Text )
 import Data.Row   ( type (.==)
                   , type (.+)
-                  , Rec
+                  , (.==)
+                  , (.+)
+                  , (.!)
                   )
-import Data.Text  ( Text )
 
 import TT.Types   ( Template )
-import TT.Example ( t )
+import TT.XY      ( tt )
 
-import TT.XY ( tt )
-
-import Data.Row
-
-exampleTemplate :: Rec ("name" .== Text .+ "age" .== Int) -> String
+exampleTemplate :: Template ("name" .== Text .+ "age" .== Int)
 exampleTemplate = [tt|My name is #{name} and I am #{age} years old.|]
 
-text1 :: String
-text1 = exampleTemplate
+exampleText :: Text
+exampleText = exampleTemplate
   (  #name .== "John"
   .+ #age  .== 48
   )
