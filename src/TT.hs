@@ -4,6 +4,7 @@
 {-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE OverloadedLabels    #-}
 {-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE QuasiQuotes         #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies        #-}
 {-# LANGUAGE TypeOperators       #-}
@@ -23,17 +24,24 @@ module TT
 
 import qualified Data.Text as T
 
-import Data.Row  ( (.==)
-                 , (.+)
-                 , (.!)
-                 -- , type (.\\)
-                 , type (.==)
-                 , type (.+)
-                 , Rec
-                 -- , Row
-                 , Forall
-                 )
+-- import Data.Row  ( (.==)
+--                  , (.+)
+--                  , (.!)
+--                  -- , type (.\\)
+--                  , type (.==)
+--                  , type (.+)
+--                  , Rec
+--                  -- , Row
+--                  , Forall
+--                  )
+import Data.Row
 import Data.Row.Internal ( Unconstrained1 )
+
+import Data.String.Interpolate
+
+import Language.Haskell.TH.Quote
+
+import TT.QQ ( t )
 
 -- | A template is a function from a row type to text.
 type Template a = Rec a -> T.Text
@@ -54,14 +62,24 @@ partial :: forall a b.
         -> Template b
 partial t a = \b -> t (a .+ b)
 
+
+texample :: Template ("name" .== T.Text .+ "age" .== Int)
+texample = [t|My name is #{name} and I am #{age} years old.|]
+
 example :: Template ("name" .== T.Text .+ "age" .== Int)
-example r = T.unwords
-  [ "My name is"
-  , r .! #name
-  , "and I am"
-  , (T.pack . show) (r .! #age)
-  , "years old."
-  ]
+-- example r = [i|My name is #{r .! #name} and I am #{r .! #age} years old.|]
+example r = [i|My name is #{name} and I am #{age} years old.|]
+  where
+    name = r .! #name
+    age  = r .! #age
+
+-- example r = T.unwords
+--   [ "My name is"
+--   , r .! #name
+--   , "and I am"
+--   , (T.pack . show) (r .! #age)
+--   , "years old."
+--   ]
 
 renderedExample :: T.Text
 renderedExample = render example (#name .== "Rip Van Winkle" .+ #age .== 55)

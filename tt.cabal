@@ -28,6 +28,11 @@ source-repository head
 library
   exposed-modules:
       TT
+      TT.Example
+      TT.ExampleTest
+      TT.QQ
+      TT.Types
+      TT.XY
   other-modules:
       Paths_tt
   hs-source-dirs:
@@ -41,6 +46,8 @@ library
     , lens
     , protolude
     , row-types
+    , string-interpolate
+    , template-haskell
     , text
     , uuid
     , vector
@@ -64,10 +71,12 @@ test-suite tt-test
     , lens
     , protolude
     , row-types
+    , string-interpolate
     , tasty
     , tasty-discover
     , tasty-hspec
     , tasty-quickcheck
+    , template-haskell
     , text
     , tt
     , uuid

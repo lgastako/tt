@@ -23,7 +23,9 @@ dependencies:
 - generic-lens
 - lens
 - protolude
+- string-interpolate
 - row-types
+- template-haskell
 - text
 - uuid
 - vector
