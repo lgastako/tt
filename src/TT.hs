@@ -15,6 +15,9 @@ module TT
   , renderedExample
   , partialExample
   , finishedExample
+  , partialGeneral
+  , exampleGeneral
+  , renderedExampleGeneral
   ) where
 
 import qualified Data.Text as T
@@ -78,4 +81,17 @@ partialGeneral :: forall a b c.
                => Template ((a .+ b) .+ c)
                -> Rec (a .+ b)
                -> Template c
-partialGeneral = undefined
+partialGeneral t ab = \c -> t (ab .+ c)
+
+exampleGeneral :: Template (("person" .== ("name" .== T.Text .+ "age" .== Int)) .+ "location" .== T.Text)
+exampleGeneral r = T.unwords
+  [ "My name is"
+  , (r .! #person) .! #name
+  , "and I am"
+  , (T.pack . show) ((r .! #person) .! #age)
+  , "years old and I live in"
+  , r .! #location
+  ]
+
+renderedExampleGeneral :: T.Text
+renderedExampleGeneral = render exampleGeneral ((#person .== (#name .== "Rip Van Winkle" .+ #age .== 55)) .+ #location .== "Sleepy Hollow")
