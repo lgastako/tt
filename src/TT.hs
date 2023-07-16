@@ -16,9 +16,9 @@ module TT
   , renderedExample
   , partialExample
   , finishedExample
-  , partialGeneral
-  , exampleGeneral
-  , renderedExampleGeneral
+  -- , partialGeneral
+  -- , exampleGeneral
+  -- , renderedExampleGeneral
   ) where
 
 import qualified Data.Text as T
@@ -26,11 +26,11 @@ import qualified Data.Text as T
 import Data.Row  ( (.==)
                  , (.+)
                  , (.!)
-                 , type (.\\)
+                 -- , type (.\\)
                  , type (.==)
                  , type (.+)
                  , Rec
-                 , Row
+                 -- , Row
                  , Forall
                  )
 import Data.Row.Internal ( Unconstrained1 )
@@ -47,7 +47,8 @@ render = ($)
 
 -- | Partially apply a template by passing a partial row-type.
 partial :: forall a b.
-           Forall (a .+ b) Unconstrained1
+           Forall a Unconstrained1
+           -- Forall (a .+ b) Unconstrained1
         => Template (a .+ b)
         -> Rec a
         -> Template b
@@ -77,22 +78,22 @@ finishedExample = partialExample (#age .== 55)
 -- and we call it with:
 --   Rec ("person" .== ("name" .== "Rip Van Winkle"))
 
-partialGeneral :: forall a b c.
-                  Forall (a .+ b) Unconstrained1
-               => Template ((a .+ b) .+ c)
-               -> Rec (a .+ b)
-               -> Template c
-partialGeneral t ab = \c -> t (ab .+ c)
+-- partialGeneral :: forall a b c.
+--                   Forall (a .+ b) Unconstrained1
+--                => Template ((a .+ b) .+ c)
+--                -> Rec (a .+ b)
+--                -> Template c
+-- partialGeneral t ab = \c -> t (ab .+ c)
 
-exampleGeneral :: Template ("person" .== Rec ("name" .== T.Text .+ "age" .== Int) .+ "location" .== T.Text)
-exampleGeneral r = T.unwords
-  [ "My name is"
-  , ((r .! #person) .! #name)
-  , "and I am"
-  , (T.pack . show) ((r .! #person) .! #age)
-  , "years old and I live in"
-  , r .! #location
-  ]
+-- exampleGeneral :: Template ("person" .== Rec ("name" .== T.Text .+ "age" .== Int) .+ "location" .== T.Text)
+-- exampleGeneral r = T.unwords
+--   [ "My name is"
+--   , ((r .! #person) .! #name)
+--   , "and I am"
+--   , (T.pack . show) ((r .! #person) .! #age)
+--   , "years old and I live in"
+--   , r .! #location
+--   ]
 
-renderedExampleGeneral :: T.Text
-renderedExampleGeneral = render exampleGeneral ((#person .== Rec (#name .== "Rip Van Winkle" .+ #age .== 55)) .+ #location .== "Sleepy Hollow")
+-- renderedExampleGeneral :: T.Text
+-- renderedExampleGeneral = render exampleGeneral ((#person .== Rec (#name .== "Rip Van Winkle" .+ #age .== 55)) .+ #location .== "Sleepy Hollow")
