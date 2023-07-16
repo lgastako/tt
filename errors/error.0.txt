@@ -1,0 +1,42 @@
+src/TT.hs:(79,19)-(83,28): error: …
+    • Couldn't match type: a0 .+ b0
+                     with: a .+ b
+      Expected: Template ((a .+ b) .+ c) -> Rec (a .+ b) -> Template c
+        Actual: Template ((a0 .+ b0) .+ c)
+                -> Rec (a0 .+ b0) -> Template c
+      NB: ‘.+’ is a non-injective type family
+      The type variables ‘a0’, ‘b0’ are ambiguous
+    • In the ambiguity check for ‘partialGeneral’
+      To defer the ambiguity check to use sites, enable AllowAmbiguousTypes
+      In the type signature:
+        partialGeneral :: forall a b c. Forall a Unconstrained1 =>
+                                        Template ((a .+ b) .+ c) -> Rec (a .+ b) -> Template c
+   |
+src/TT.hs:86:29-104: error: …
+    • Couldn't match kind ‘Row (*)’ with ‘*’
+      Expected kind ‘Row (*)’,
+        but ‘("person" .== ("name" .== T.Text .+ "age" .== Int))
+             .+ "location" .== T.Text’ has kind ‘Row (Row (*))’
+    • In the first argument of ‘Template’, namely
+        ‘(("person" .== ("name" .== T.Text .+ "age" .== Int))
+          .+ "location" .== T.Text)’
+      In the type signature:
+        exampleGeneral :: Template (("person"
+                                     .== ("name" .== T.Text .+ "age" .== Int))
+                                    .+ "location" .== T.Text)
+   |
+src/TT.hs:86:84-104: error: …
+    • Couldn't match kind ‘*’ with ‘Row (*)’
+      Expected kind ‘Row (Row (*))’,
+        but ‘"location" .== T.Text’ has kind ‘Row (*)’
+    • In the second argument of ‘(.+)’, namely ‘"location" .== T.Text’
+      In the first argument of ‘Template’, namely
+        ‘(("person" .== ("name" .== T.Text .+ "age" .== Int))
+          .+ "location" .== T.Text)’
+      In the type signature:
+        exampleGeneral :: Template (("person"
+                                     .== ("name" .== T.Text .+ "age" .== Int))
+                                    .+ "location" .== T.Text)
+   |
+Compilation failed.
+λ> 

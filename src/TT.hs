@@ -83,10 +83,10 @@ partialGeneral :: forall a b c.
                -> Template c
 partialGeneral t ab = \c -> t (ab .+ c)
 
-exampleGeneral :: Template (("person" .== ("name" .== T.Text .+ "age" .== Int)) .+ "location" .== T.Text)
+exampleGeneral :: Template ("person" .== Rec ("name" .== T.Text .+ "age" .== Int) .+ "location" .== T.Text)
 exampleGeneral r = T.unwords
   [ "My name is"
-  , (r .! #person) .! #name
+  , ((r .! #person) .! #name)
   , "and I am"
   , (T.pack . show) ((r .! #person) .! #age)
   , "years old and I live in"
@@ -94,4 +94,4 @@ exampleGeneral r = T.unwords
   ]
 
 renderedExampleGeneral :: T.Text
-renderedExampleGeneral = render exampleGeneral ((#person .== (#name .== "Rip Van Winkle" .+ #age .== 55)) .+ #location .== "Sleepy Hollow")
+renderedExampleGeneral = render exampleGeneral ((#person .== Rec (#name .== "Rip Van Winkle" .+ #age .== 55)) .+ #location .== "Sleepy Hollow")
