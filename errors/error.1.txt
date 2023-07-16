@@ -1,0 +1,16 @@
+src/TT.hs:(79,19)-(83,28): error: …
+    • Couldn't match type: a0 .+ b0
+                     with: a .+ b
+      Expected: Template ((a .+ b) .+ c) -> Rec (a .+ b) -> Template c
+        Actual: Template ((a0 .+ b0) .+ c)
+                -> Rec (a0 .+ b0) -> Template c
+      NB: ‘.+’ is a non-injective type family
+      The type variables ‘a0’, ‘b0’ are ambiguous
+    • In the ambiguity check for ‘partialGeneral’
+      To defer the ambiguity check to use sites, enable AllowAmbiguousTypes
+      In the type signature:
+        partialGeneral :: forall a b c. Forall a Unconstrained1 =>
+                                        Template ((a .+ b) .+ c) -> Rec (a .+ b) -> Template c
+   |
+Compilation failed.
+λ> 
