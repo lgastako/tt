@@ -72,4 +72,4 @@ partialGeneral :: forall a b.
                => Template a
                -> Rec b
                -> Template (a .\\ b)
-partialGeneral t b =  -> t (a .+ b)
+partialGeneral t b = \a -> t (a .+ b)
