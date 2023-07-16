@@ -73,9 +73,9 @@ finishedExample = partialExample (#age .== 55)
 -- and we call it with:
 --   Rec ("person" .== ("name" .== "Rip Van Winkle"))
 
-partialGeneral :: forall a b.
+partialGeneral :: forall a b c.
                   Forall a Unconstrained1
-               => Template (a .+ b)
-               -> Rec a
-               -> Template b
+               => Template ((a .+ b) .+ c)
+               -> Rec (a .+ b)
+               -> Template c
 partialGeneral = undefined
