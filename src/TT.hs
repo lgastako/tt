@@ -69,7 +69,7 @@ finishedExample = partialExample (#age .== 55)
 
 partialGeneral :: forall a b.
                   Forall a Unconstrained1
-               => Template a
-               -> Rec b
-               -> Template (a .\\ b)
-partialGeneral t b = \a -> t (a .+ b)
+               => Template ((a .\\ b) .+ b)
+               -> Rec a
+               -> Template b
+partialGeneral t b = undefined
