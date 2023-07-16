@@ -28,6 +28,9 @@ import Data.Row  ( (.==)
                  )
 import Data.Row.Internal ( Unconstrained1 )
 
+import Data.Row (type (.--))
+
+
 -- | A template is a function from a row type to text.
 type Template a = Rec a -> T.Text
 
@@ -63,3 +66,15 @@ partialExample = partial example (#name .== "Rip Van Winkle")
 
 finishedExample :: T.Text
 finishedExample = partialExample (#age .== 55)
+
+
+type family Remaining a b where
+  Remaining a a = a
+  Remaining a b = a .-- b
+
+partialGeneral :: forall a b.
+                  Forall a Unconstrained1
+               => Template a
+               -> Rec b
+               -> Template (Remaining a b)
+partialGeneral t b = \a -> t (b .+ a)
