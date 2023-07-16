@@ -28,11 +28,9 @@ source-repository head
 library
   exposed-modules:
       TT
-      TT.Example
-      TT.ExampleTest
+      TT.Examples
       TT.QQ
       TT.Types
-      TT.XY
   other-modules:
       Paths_tt
   hs-source-dirs:

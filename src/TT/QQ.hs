@@ -1,41 +1,44 @@
--- {-# LANGUAGE AllowAmbiguousTypes #-}
--- {-# LANGUAGE DataKinds           #-}
--- {-# LANGUAGE ExplicitNamespaces  #-}
--- {-# LANGUAGE FlexibleContexts    #-}
--- {-# LANGUAGE OverloadedLabels    #-}
--- {-# LANGUAGE OverloadedStrings   #-}
--- {-# LANGUAGE QuasiQuotes         #-}
--- {-# LANGUAGE ScopedTypeVariables #-}
--- {-# LANGUAGE TypeFamilies        #-}
--- {-# LANGUAGE TypeOperators       #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-module TT.QQ
-  ( t
-  ) where
+{-# OPTIONS_GHC -Wno-everything #-}
 
-import Language.Haskell.TH.Quote  ( QuasiQuoter( QuasiQuoter
-                                               , quoteExp
-                                               , quotePat
-                                               , quoteDec
-                                               , quoteType
-                                               )
-                                  )
-import Language.Haskell.TH.Syntax ( Exp
-                                  , Q
-                                  )
+module TT.QQ ( tt ) where
 
--- import qualified Data.Text as T
--- import Data.Row
--- import Data.Row.Internal ( Unconstrained1 )
--- import Data.String.Interpolate
+import Language.Haskell.TH
+import Language.Haskell.TH.Quote
 
-t :: QuasiQuoter
-t = QuasiQuoter
-  { quoteExp  = qExp
-  , quotePat  = undefined
-  , quoteDec  = undefined
-  , quoteType = undefined
-  }
+import Data.Char (isAlphaNum)
 
-qExp :: String -> Q Exp
-qExp = undefined
+import Data.String.Interpolate ( i )
+import Data.String.Interpolate.Parse ( parseInterpSegments )
+import Data.String.Interpolate.Types ( InterpSegment(..)
+                                     , Line
+                                     , Lines
+                                     )
+
+-- TODO errors for the other types.
+tt :: QuasiQuoter
+tt = QuasiQuoter { quoteExp = mkExp }
+
+mkExp :: String -> Q Exp
+mkExp s = lamE [varP $ mkName "r"] (quoteExp i . injectRefs $ s)
+
+injectRefs :: String -> String
+injectRefs s = case parseInterpSegments s of
+  Left err -> error err
+  Right segs -> reassemble segs
+  where
+    reassemble :: Lines -> String
+    reassemble = concatMap f
+
+    f :: Line -> String
+    f = concatMap g
+
+    g :: InterpSegment -> String
+    g = \case
+      Expression s -> "#{r .! #" ++ s ++ "}"
+      Verbatim s   -> s
+      Spaces n     -> replicate n ' '
+      Tabs n       -> replicate n '\t'
