@@ -28,7 +28,6 @@ source-repository head
 library
   exposed-modules:
       TT
-      TT.Examples
       TT.QQ
       TT.Types
   other-modules:
@@ -55,6 +54,7 @@ test-suite tt-test
   type: exitcode-stdio-1.0
   main-is: Driver.hs
   other-modules:
+      TestTT
       Paths_tt
   hs-source-dirs:
       test
