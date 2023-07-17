@@ -4,7 +4,10 @@
 
 {-# OPTIONS_GHC -Wno-everything #-}
 
-module TT.QQ ( tt ) where
+module TT.QQ
+  ( tt
+  , ttFrom
+  ) where
 
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
@@ -21,6 +24,9 @@ import Data.String.Interpolate.Types ( InterpSegment(..)
 -- TODO errors for the other types.
 tt :: QuasiQuoter
 tt = QuasiQuoter { quoteExp = mkExp }
+
+ttFrom :: QuasiQuoter
+ttFrom = quoteFile tt
 
 mkExp :: String -> Q Exp
 mkExp s = lamE [varP $ mkName "r"] (quoteExp i . injectRefs $ s)

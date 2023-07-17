@@ -6,9 +6,10 @@
 
 module TT
   ( Template
+  , partial
   , render
   , tt
-  , partial
+  , ttFrom
   ) where
 
 import Data.Row          ( (.+)
@@ -19,7 +20,9 @@ import Data.Row          ( (.+)
 import Data.Row.Internal ( Unconstrained1 )
 import Data.Text         ( Text )
 
-import TT.QQ             ( tt )
+import TT.QQ             ( tt
+                         , ttFrom
+                         )
 import TT.Types          ( Template )
 
 -- TODO File version(s)

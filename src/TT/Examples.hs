@@ -11,6 +11,8 @@ module TT.Examples
   , exampleText2
   , finishedExample
   , partialExample
+  , templateFromFile
+  , textFromFile
   ) where
 
 import Data.Text  ( Text )
@@ -25,6 +27,7 @@ import TT         ( Template
                   , partial
                   , render
                   , tt
+                  , ttFrom
                   )
 
 exampleTemplate :: Template ("name" .== Text .+ "age" .== Int)
@@ -47,3 +50,12 @@ partialExample = partial exampleTemplate (#name .== "Rip Van Winkle")
 
 finishedExample :: Text
 finishedExample = render partialExample (#age .== 55)
+
+templateFromFile :: Template ("name" .== Text .+ "age" .== Int)
+templateFromFile = [ttFrom|test/example.template.txt|]
+
+textFromFile :: Text
+textFromFile = render templateFromFile
+  (  #name .== "Freddy Fileman"
+  .+ #age  .== 5150
+  )
